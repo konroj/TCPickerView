@@ -32,15 +32,11 @@ class TCPickerTableViewCell: UITableViewCell, TCPickerCellType {
     }
     
     private var checkmark: UIImage {
-        var image = UIImage()
-        let podBundle = Bundle(for: TCPickerView.self)
-        if let url = podBundle.url(forResource: "TCPickerView", withExtension: "bundle") {
-            let bundle = Bundle(url: url)
-            image = UIImage(named: "checkmark_icon", in: bundle, compatibleWith: nil)!
-        } else {
-            return UIImage(named: "checkmark_icon")!
-        }
-        return image
+      if #available(iOS 13.0, *) {
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium, scale: .default)
+        return UIImage(systemName: "checkmark", withConfiguration: config)!
+      }
+      return UIImage()
     }
     private var titleLabel: UILabel = UILabel(frame: CGRect.zero)
     private var checkmarkImageView: UIImageView = UIImageView(frame: CGRect.zero)
@@ -97,6 +93,7 @@ class TCPickerTableViewCell: UITableViewCell, TCPickerCellType {
     
     func updateUI() {
         self.titleLabel.text = self.viewModel?.title ?? ""
+        self.checkmarkImageView.tintColor = .black
         self.checkmarkImageView.image = self.viewModel?.isChecked == true ?
             self.checkmark : UIImage()
     }
